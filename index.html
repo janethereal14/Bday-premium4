@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Royal Celebration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #d4af37;
+            --dark: #050505;
+            --cream: #fdfbf7;
+            --cake-pink: #ffb7c5;
+        }
+
+        * { box-sizing: border-box; }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            background-color: var(--dark);
+            color: var(--cream);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Luxury Emoji Rain */
+        .emoji {
+            position: fixed;
+            top: -50px;
+            font-size: 2rem;
+            z-index: 1;
+            user-select: none;
+            pointer-events: none;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+
+        .page {
+            display: none;
+            min-height: 100vh;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .active { display: flex; }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 10vw, 6rem);
+            letter-spacing: 4px;
+            background: linear-gradient(to right, #fbf5e6, #d4af37, #fbf5e6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .premium-btn {
+            background: transparent;
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            padding: 22px 55px;
+            font-size: 1.1rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.6s ease;
+            backdrop-filter: blur(5px);
+            z-index: 10;
+        }
+
+        .premium-btn:hover {
+            background: var(--gold);
+            color: var(--dark);
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Page 2: The Slow Cinematic Crawl */
+        #timer-display {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--gold);
+            margin-bottom: 50px;
+            letter-spacing: 2px;
+        }
+
+        .scroll-wrapper {
+            height: 300vh; /* Extra height for long scrolling */
+            width: 100%;
+        }
+
+        .luxury-para {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            line-height: 1.6;
+            color: var(--cream);
+            opacity: 0;
+            transform: translateY(100px);
+            transition: all 4s cubic-bezier(0.2, 1, 0.3, 1); /* Very slow transition */
+            max-width: 900px;
+            margin: 40vh auto; /* Huge spacing between paras */
+        }
+
+        .luxury-para.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Page 3: The Big Realistic Cake */
+        .cake-box {
+            position: relative;
+            width: 300px;
+            height: 250px;
+            margin-top: 50px;
+        }
+
+        .cake-layer {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 250px;
+            height: 100px;
+            background: var(--cake-pink);
+            border-radius: 20px 20px 5px 5px;
+            box-shadow: inset 0 -10px 0 rgba(0,0,0,0.1);
+        }
+
+        .cake-layer-top {
+            bottom: 80px;
+            width: 180px;
+            height: 80px;
+            background: #ffcdd2;
+        }
+
+        .candle {
+            position: absolute;
+            bottom: 160px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 50px;
+            background: linear-gradient(to bottom, #fff, var(--gold));
+            border-radius: 3px;
+        }
+
+        .flame {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 15px;
+            height: 25px;
+            background: #ff9800;
+            border-radius: 50% 50% 20% 20%;
+            box-shadow: 0 0 20px #ffeb3b;
+            animation: flicker 0.1s infinite alternate;
+        }
+
+        @keyframes flicker {
+            from { transform: translateX(-50%) scale(1); }
+            to { transform: translateX(-50%) scale(1.2) rotate(2deg); }
+        }
+
+        /* Page 4: Gift Grid */
+        .gift-container { display: flex; flex-direction: column; align-items: center; gap: 40px; }
+        .gift-row { display: flex; gap: 40px; }
+        .gift-card {
+            width: 150px; height: 150px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--gold);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 3.5rem; border-radius: 20px; cursor: pointer; transition: 0.5s;
+        }
+        .video-gift { width: 220px; height: 220px; font-size: 5rem; }
+
+        /* Overlay */
+        #gift-overlay {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.98);
+            z-index: 2000; flex-direction: column; align-items: center; justify-content: center;
+        }
+        #media-content img, #media-content video { max-width: 85vw; max-height: 70vh; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" loop>
+        <source src="Saja_Boys_Ft_Andrew_Choi_neckwav_Danny_Chung_Kevin_Woo_SamUIL_KPop_Demon_Hunters_Cast_-_Soda_Pop_thinknews.com.ng.mp3" type="audio/mpeg">
+    </audio>
+
+    <section id="p1" class="page active">
+        <h1>A Grand Occasion</h1>
+        <button class="premium-btn" onclick="initiate()">Click Here</button>
+    </section>
+
+    <section id="p2" class="page" style="height: auto; justify-content: flex-start; padding-top: 100px;">
+        <div id="timer-display">Initialising...</div>
+        <div class="scroll-wrapper">
+            <p class="luxury-para" id="text1">Since August 14, 2008,</p>
+            <p class="luxury-para" id="text2">The world has been graced by your light.</p>
+            <p class="luxury-para" id="text3">You are a masterpiece in motion.</p>
+            <button id="wishBtn" class="premium-btn" style="display: none; margin: 100px auto;" onclick="toCake()">Wish Now</button>
+        </div>
+    </section>
+
+    <section id="p3" class="page">
+        <h2 id="countdown-text" style="font-size: 6rem; color: var(--gold);">3</h2>
+        
+        <div class="cake-box">
+            <div class="cake-layer"></div>
+            <div class="cake-layer cake-layer-top"></div>
+            <div class="candle">
+                <div class="flame" id="main-flame"></div>
+            </div>
+        </div>
+
+        <p style="letter-spacing: 8px; text-transform: uppercase; margin-top: 50px; font-size: 1.5rem;">Make a wish</p>
+    </section>
+
+    <section id="p4" class="page">
+        <h1>Your Curated Gifts</h1>
+        <div class="gift-container">
+            <div class="gift-row">
+                <div class="gift-card" onclick="openGift(1)">🎁</div>
+                <div class="gift-card" onclick="openGift(2)">🎁</div>
+            </div>
+            <div class="gift-row">
+                <div class="gift-card" onclick="openGift(3)">🎁</div>
+                <div class="gift-card" onclick="openGift(4)">🎁</div>
+            </div>
+            <div class="gift-card video-gift" onclick="openGift(5)">🎁</div>
+        </div>
+        <div id="final-msg" style="margin-top: 50px; font-size: 2.5rem; color: var(--gold); opacity: 0; transition: 3s;">u r loved 💖</div>
+    </section>
+
+    <div id="gift-overlay">
+        <div id="media-content"></div>
+        <button class="premium-btn" style="margin-top:40px;" onclick="closeGift()">Close</button>
+    </div>
+
+    <script>
+        const birthDate = new Date('August 14, 2008 00:00:00');
+
+        function createEmoji() {
+            const emojis = ['✨','🎉','🎊','🎂','💖'];
+            const e = document.createElement('div');
+            e.className = 'emoji';
+            e.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+            e.style.left = Math.random() * 100 + 'vw';
+            e.style.animationDuration = (Math.random() * 4 + 6) + 's';
+            document.body.appendChild(e);
+            setTimeout(() => e.remove(), 10000);
+        }
+        setInterval(createEmoji, 600);
+
+        function initiate() {
+            document.getElementById('bgMusic').play();
+            switchPage('p1', 'p2');
+            startTimer();
+            
+            // VERY SLOW SEQUENCE
+            setTimeout(() => { revealText('text1', 600); }, 3000);
+            setTimeout(() => { revealText('text2', 1500); }, 10000); // 7 second delay
+            setTimeout(() => { 
+                revealText('text3', 2500); 
+                document.getElementById('wishBtn').style.display = 'block';
+            }, 18000);
+        }
+
+        function revealText(id, scrollPos) {
+            const el = document.getElementById(id);
+            el.classList.add('visible');
+            window.scrollTo({top: scrollPos, behavior: 'smooth'});
+        }
+
+        function startTimer() {
+            setInterval(() => {
+                const now = new Date();
+                const diff = now - birthDate;
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const months = Math.floor(days / 30.44);
+                const seconds = Math.floor(diff / 1000);
+                document.getElementById('timer-display').innerHTML = 
+                    `${months} MONTHS — ${days} DAYS — ${seconds} SECONDS`;
+            }, 1000);
+        }
+
+        function toCake() {
+            window.scrollTo(0,0);
+            switchPage('p2', 'p3');
+            let count = 3;
+            const cd = document.getElementById('countdown-text');
+            const timer = setInterval(() => {
+                count--;
+                if(count > 0) cd.innerText = count;
+                if(count === 0) {
+                    clearInterval(timer);
+                    cd.innerText = "✨";
+                    document.getElementById('main-flame').style.display = 'none'; // Blown out!
+                    setTimeout(() => switchPage('p3', 'p4'), 1500);
+                }
+            }, 1000);
+        }
+
+        function openGift(num) {
+            const overlay = document.getElementById('gift-overlay');
+            const container = document.getElementById('media-content');
+            overlay.style.display = 'flex';
+
+            // ADD YOUR PHOTO/VIDEO NAMES HERE
+            if (num === 1) container.innerHTML = `<img src="Screenshot_2026-05-04-15-34-31-232.jpeg">`;
+            if (num === 2) container.innerHTML = `<img src="Screenshot_2026-05-04-15-30-22-145.jpeg">`;
+            if (num === 3) container.innerHTML = `<img src="Screenshot_2026-05-04-15-49-55-674.jpeg">`;
+            if (num === 4) container.innerHTML = `<img src="Screenshot_2026-05-04-15-51-20-647.jpeg">`;
+            if (num === 5) {
+                container.innerHTML = `<video controls autoplay><source src="VID-20260328-WA0025.mp4" type="video/mp4"></video>`;
+                document.getElementById('final-msg').style.opacity = '1';
+            }
+        }
+
+        function closeGift() {
+            document.getElementById('gift-overlay').style.display = 'none';
+            document.getElementById('media-content').innerHTML = '';
+        }
+
+        function switchPage(oldId, newId) {
+            document.getElementById(oldId).classList.remove('active');
+            document.getElementById(newId).classList.add('active');
+        }
+    </script>
+</body>
+  </html>
