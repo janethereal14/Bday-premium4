@@ -3,339 +3,266 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Royal Celebration</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+    <title>A Golden Celebration </title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@200;400&family=Playfair+Display:ital,wght@0,400;1,600&display=swap" rel="stylesheet">
+    
     <style>
         :root {
             --gold: #d4af37;
-            --dark: #050505;
-            --cream: #fdfbf7;
-            --cake-pink: #ffb7c5;
+            --dark-bg: #0a0a0a;
+            --glass: rgba(255, 255, 255, 0.05);
+            --premium-white: #f4f4f4;
         }
-
-        * { box-sizing: border-box; }
 
         body, html {
-            margin: 0;
-            padding: 0;
-            background-color: var(--dark);
-            color: var(--cream);
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
+            margin: 0; padding: 0;
+            background-color: var(--dark-bg);
+            color: var(--premium-white);
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden; height: 100%;
         }
 
-        /* Luxury Emoji Rain */
-        .emoji {
-            position: fixed;
-            top: -50px;
-            font-size: 2rem;
-            z-index: 1;
-            user-select: none;
-            pointer-events: none;
-            animation: fall linear forwards;
-        }
-
-        @keyframes fall {
-            to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        .bg-gradient {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+            z-index: -2;
         }
 
         .page {
-            display: none;
-            min-height: 100vh;
-            width: 100%;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 60px 20px;
+            display: none; height: 100vh; width: 100vw;
+            flex-direction: column; align-items: center; justify-content: center;
             text-align: center;
-            position: relative;
         }
 
-        .active { display: flex; }
+        .active { display: flex; animation: pageFade 2s forwards; }
+        @keyframes pageFade { from { opacity: 0; } to { opacity: 1; } }
 
-        h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(3rem, 10vw, 6rem);
-            letter-spacing: 4px;
-            background: linear-gradient(to right, #fbf5e6, #d4af37, #fbf5e6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        h1, h2 { font-family: 'Cinzel', serif; letter-spacing: 5px; text-transform: uppercase; margin: 10px 0; }
+        p { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-style: italic; }
+
+        .gold-btn {
+            padding: 18px 45px; background: transparent; color: var(--gold);
+            border: 1px solid var(--gold); border-radius: 40px;
+            cursor: pointer; transition: all 0.5s ease;
+            text-transform: uppercase; letter-spacing: 3px; font-size: 0.8rem;
         }
 
-        .premium-btn {
-            background: transparent;
-            color: var(--gold);
-            border: 1px solid var(--gold);
-            padding: 22px 55px;
-            font-size: 1.1rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            border-radius: 60px;
-            cursor: pointer;
-            transition: all 0.6s ease;
-            backdrop-filter: blur(5px);
-            z-index: 10;
+        .gold-btn:hover {
+            background: var(--gold); color: black;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
         }
 
-        .premium-btn:hover {
-            background: var(--gold);
-            color: var(--dark);
-            box-shadow: 0 0 40px rgba(212, 175, 55, 0.4);
+        /* Page 2: Scrolling */
+        #timer { font-family: 'Cinzel', serif; color: var(--gold); font-size: 1.1rem; margin-bottom: 20px; }
+        
+        #scroll-content {
+            height: 50vh; width: 80%; overflow: hidden;
+            mask-image: linear-gradient(transparent, black 20%, black 80%, transparent);
+            -webkit-mask-image: linear-gradient(transparent, black 20%, black 80%, transparent);
         }
 
-        /* Page 2: The Slow Cinematic Crawl */
-        #timer-display {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            color: var(--gold);
-            margin-bottom: 50px;
-            letter-spacing: 2px;
+        .para {
+            opacity: 0; margin: 180px 0; line-height: 2;
+            transition: opacity 3s ease; white-space: nowrap;
         }
 
-        .scroll-wrapper {
-            height: 300vh; /* Extra height for long scrolling */
-            width: 100%;
+        /* Luxury Falling Elements */
+        .emoji {
+            position: fixed; top: -50px; pointer-events: none;
+            animation: fall linear infinite; filter: drop-shadow(0 0 5px gold);
         }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
 
-        .luxury-para {
-            font-family: 'Playfair Display', serif;
-            font-size: 3rem;
-            line-height: 1.6;
-            color: var(--cream);
-            opacity: 0;
-            transform: translateY(100px);
-            transition: all 4s cubic-bezier(0.2, 1, 0.3, 1); /* Very slow transition */
-            max-width: 900px;
-            margin: 40vh auto; /* Huge spacing between paras */
-        }
-
-        .luxury-para.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Page 3: The Big Realistic Cake */
-        .cake-box {
-            position: relative;
-            width: 300px;
-            height: 250px;
-            margin-top: 50px;
-        }
-
-        .cake-layer {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 250px;
-            height: 100px;
-            background: var(--cake-pink);
-            border-radius: 20px 20px 5px 5px;
-            box-shadow: inset 0 -10px 0 rgba(0,0,0,0.1);
-        }
-
-        .cake-layer-top {
-            bottom: 80px;
-            width: 180px;
-            height: 80px;
-            background: #ffcdd2;
-        }
-
-        .candle {
-            position: absolute;
-            bottom: 160px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 12px;
-            height: 50px;
-            background: linear-gradient(to bottom, #fff, var(--gold));
-            border-radius: 3px;
-        }
-
+        /* Page 3: Cake */
+        .cake-box { position: relative; margin: 40px; }
+        .candle { width: 8px; height: 50px; background: linear-gradient(var(--gold), #fff); margin: 0 auto; position: relative; }
         .flame {
-            position: absolute;
-            top: -25px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 15px;
-            height: 25px;
-            background: #ff9800;
-            border-radius: 50% 50% 20% 20%;
-            box-shadow: 0 0 20px #ffeb3b;
+            width: 15px; height: 25px; background: #ffae00; border-radius: 50% 50% 20% 20%;
+            position: absolute; top: -25px; left: -4px; box-shadow: 0 0 20px #ffae00;
             animation: flicker 0.1s infinite alternate;
         }
 
-        @keyframes flicker {
-            from { transform: translateX(-50%) scale(1); }
-            to { transform: translateX(-50%) scale(1.2) rotate(2deg); }
+        /* Page 4: Gift Grid (2-2-1 Layout) */
+        .gift-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 120px);
+            gap: 20px;
+            justify-content: center;
         }
 
-        /* Page 4: Gift Grid */
-        .gift-container { display: flex; flex-direction: column; align-items: center; gap: 40px; }
-        .gift-row { display: flex; gap: 40px; }
-        .gift-card {
-            width: 150px; height: 150px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--gold);
+        .gift-box {
+            width: 120px; height: 120px; background: var(--glass);
+            border: 1px solid rgba(212, 175, 55, 0.3);
             display: flex; align-items: center; justify-content: center;
-            font-size: 3.5rem; border-radius: 20px; cursor: pointer; transition: 0.5s;
+            cursor: pointer; transition: 0.4s; font-family: 'Cinzel'; font-size: 1.5rem;
         }
-        .video-gift { width: 220px; height: 220px; font-size: 5rem; }
 
-        /* Overlay */
-        #gift-overlay {
-            display: none; position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%; background: rgba(0,0,0,0.98);
-            z-index: 2000; flex-direction: column; align-items: center; justify-content: center;
+        .gift-box:hover { border-color: var(--gold); background: rgba(212, 175, 55, 0.1); transform: translateY(-5px); }
+
+        .video-gift {
+            grid-column: span 2;
+            width: 120px;
+            justify-self: center;
         }
-        #media-content img, #media-content video { max-width: 85vw; max-height: 70vh; border-radius: 10px; }
+
+        #media-vault {
+            margin-top: 30px;
+            width: 90%; max-width: 500px; height: 300px;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .media-content {
+            max-width: 100%; max-height: 100%;
+            border: 1px solid var(--gold);
+            animation: pageFade 1s forwards;
+        }
     </style>
 </head>
 <body>
 
-    <audio id="bgMusic" loop>
-        <source src="Saja_Boys_Ft_Andrew_Choi_neckwav_Danny_Chung_Kevin_Woo_SamUIL_KPop_Demon_Hunters_Cast_-_Soda_Pop_thinknews.com.ng.mp3" type="audio/mpeg">
-    </audio>
+    <div class="bg-gradient"></div>
+    <audio id="bgMusic" loop src="assets/premium-ambience.mp3"></audio>
 
-    <section id="p1" class="page active">
-        <h1>A Grand Occasion</h1>
-        <button class="premium-btn" onclick="initiate()">Click Here</button>
+    <section id="page1" class="page active">
+        <h1 style="font-size: 3.5rem;">August 14</h1>
+        <p>A Journey Through Time</p>
+        <button class="gold-btn" onclick="start()">Enter Experience</button>
     </section>
 
-    <section id="p2" class="page" style="height: auto; justify-content: flex-start; padding-top: 100px;">
-        <div id="timer-display">Initialising...</div>
-        <div class="scroll-wrapper">
-            <p class="luxury-para" id="text1">Since August 14, 2008,</p>
-            <p class="luxury-para" id="text2">The world has been graced by your light.</p>
-            <p class="luxury-para" id="text3">You are a masterpiece in motion.</p>
-            <button id="wishBtn" class="premium-btn" style="display: none; margin: 100px auto;" onclick="toCake()">Wish Now</button>
+    <section id="page2" class="page">
+        <div id="timer">Loading...</div>
+        <div id="scroll-content">
+            <div id="wrapper">
+                <p class="para" id="p1">Sixteen years of grace and wonder.</p>
+                <p class="para" id="p2">A path illuminated by your brilliant spirit.</p>
+                <p class="para" id="p3">Every moment has led to this golden day.</p>
+                <p class="para" id="p4">You are a masterpiece in progress.</p>
+            </div>
         </div>
+        <button id="wishBtn" class="gold-btn" style="opacity:0;" onclick="showCake()">Wish Now</button>
     </section>
 
-    <section id="p3" class="page">
-        <h2 id="countdown-text" style="font-size: 6rem; color: var(--gold);">3</h2>
-        
+    <section id="page3" class="page">
+        <h2 id="count" style="font-size: 4rem;">3</h2>
         <div class="cake-box">
-            <div class="cake-layer"></div>
-            <div class="cake-layer cake-layer-top"></div>
-            <div class="candle">
-                <div class="flame" id="main-flame"></div>
-            </div>
+            <div class="candle"><div class="flame" id="flame"></div></div>
+            <div style="width: 160px; height: 80px; background: var(--glass); border: 1px solid var(--gold);"></div>
         </div>
-
-        <p style="letter-spacing: 8px; text-transform: uppercase; margin-top: 50px; font-size: 1.5rem;">Make a wish</p>
+        <p>Close your eyes and make a wish.</p>
     </section>
 
-    <section id="p4" class="page">
-        <h1>Your Curated Gifts</h1>
-        <div class="gift-container">
-            <div class="gift-row">
-                <div class="gift-card" onclick="openGift(1)">🎁</div>
-                <div class="gift-card" onclick="openGift(2)">🎁</div>
-            </div>
-            <div class="gift-row">
-                <div class="gift-card" onclick="openGift(3)">🎁</div>
-                <div class="gift-card" onclick="openGift(4)">🎁</div>
-            </div>
-            <div class="gift-card video-gift" onclick="openGift(5)">🎁</div>
+    <section id="page4" class="page">
+        <h2>The Collection</h2>
+        <div class="gift-grid">
+            <div class="gift-box" onclick="openGift(1)">I</div>
+            <div class="gift-box" onclick="openGift(2)">II</div>
+            <div class="gift-box" onclick="openGift(3)">III</div>
+            <div class="gift-box" onclick="openGift(4)">IV</div>
+            <div class="gift-box video-gift" onclick="openGift(5)">V</div>
         </div>
-        <div id="final-msg" style="margin-top: 50px; font-size: 2.5rem; color: var(--gold); opacity: 0; transition: 3s;">u r loved 💖</div>
+        
+        <div id="media-vault"></div>
+        <h2 id="final-tag" style="display:none; color: var(--gold); margin-top: 20px;">You are loved 💖</h2>
     </section>
-
-    <div id="gift-overlay">
-        <div id="media-content"></div>
-        <button class="premium-btn" style="margin-top:40px;" onclick="closeGift()">Close</button>
-    </div>
 
     <script>
+        // --- ⚙️ EDIT YOUR FILE NAMES HERE ⚙️ ---
+        const giftRegistry = {
+            1: "Screenshot_2026-05-04-15-30-22-145.jpeg",   // Name of your 1st photo
+            2: "Screenshot_2026-05-04-15-34-31-232.jpeg", // Name of your 2nd photo
+            3: "Screenshot_2026-05-04-15-51-20-647.jpeg",   // Name of your 3rd photo
+            4: "Screenshot_2026-05-04-15-49-55-674.jpe", // Name of your 4th photo
+            5: "VID-20260328-WA0025.mp4"   // Name of your video
+        };
+        const musicFile = "Saja_Boys_Ft_Andrew_Choi_neckwav_Danny_Chung_Kevin_Woo_SamUIL_KPop_Demon_Hunters_Cast_-_Soda_Pop_thinknews.com.ng.mp3"; // Name of your music file
+        // ----------------------------------------
+
         const birthDate = new Date('August 14, 2008 00:00:00');
 
-        function createEmoji() {
-            const emojis = ['✨','🎉','🎊','🎂','💖'];
-            const e = document.createElement('div');
-            e.className = 'emoji';
-            e.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-            e.style.left = Math.random() * 100 + 'vw';
-            e.style.animationDuration = (Math.random() * 4 + 6) + 's';
-            document.body.appendChild(e);
-            setTimeout(() => e.remove(), 10000);
-        }
-        setInterval(createEmoji, 600);
-
-        function initiate() {
+        function start() {
+            document.getElementById('bgMusic').src = "assets/" + musicFile;
             document.getElementById('bgMusic').play();
-            switchPage('p1', 'p2');
-            startTimer();
+            changePage('page2');
+            initTimer();
+            initEmojis();
             
-            // VERY SLOW SEQUENCE
-            setTimeout(() => { revealText('text1', 600); }, 3000);
-            setTimeout(() => { revealText('text2', 1500); }, 10000); // 7 second delay
-            setTimeout(() => { 
-                revealText('text3', 2500); 
-                document.getElementById('wishBtn').style.display = 'block';
-            }, 18000);
-        }
+            setTimeout(() => { document.getElementById('p1').style.opacity = 1; }, 3000);
+            setTimeout(() => { document.getElementById('p2').style.opacity = 1; }, 7000);
+            setTimeout(() => { document.getElementById('p3').style.opacity = 1; }, 11000);
+            setTimeout(() => { document.getElementById('p4').style.opacity = 1; }, 15000);
+            setTimeout(() => { document.getElementById('wishBtn').style.opacity = 1; }, 18000);
 
-        function revealText(id, scrollPos) {
-            const el = document.getElementById(id);
-            el.classList.add('visible');
-            window.scrollTo({top: scrollPos, behavior: 'smooth'});
-        }
-
-        function startTimer() {
+            let y = 0;
+            const wrap = document.getElementById('wrapper');
             setInterval(() => {
-                const now = new Date();
-                const diff = now - birthDate;
-                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                y += 0.4;
+                wrap.style.transform = `translateY(-${y}px)`;
+            }, 30);
+        }
+
+        function initTimer() {
+            setInterval(() => {
+                const diff = new Date() - birthDate;
+                const days = Math.floor(diff / 86400000);
                 const months = Math.floor(days / 30.44);
                 const seconds = Math.floor(diff / 1000);
-                document.getElementById('timer-display').innerHTML = 
-                    `${months} MONTHS — ${days} DAYS — ${seconds} SECONDS`;
+                document.getElementById('timer').innerText = `${months} MONTHS | ${days} DAYS | ${seconds} SECONDS`;
             }, 1000);
         }
 
-        function toCake() {
-            window.scrollTo(0,0);
-            switchPage('p2', 'p3');
-            let count = 3;
-            const cd = document.getElementById('countdown-text');
-            const timer = setInterval(() => {
-                count--;
-                if(count > 0) cd.innerText = count;
-                if(count === 0) {
-                    clearInterval(timer);
-                    cd.innerText = "✨";
-                    document.getElementById('main-flame').style.display = 'none'; // Blown out!
-                    setTimeout(() => switchPage('p3', 'p4'), 1500);
+        function initEmojis() {
+            const icons = ['✨','🎉','🎊','🎂','💖'];
+            setInterval(() => {
+                const e = document.createElement('div');
+                e.className = 'emoji';
+                e.innerText = icons[Math.floor(Math.random() * icons.length)];
+                e.style.left = Math.random() * 100 + 'vw';
+                e.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                e.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                document.body.appendChild(e);
+                setTimeout(() => e.remove(), 8000);
+            }, 400);
+        }
+
+        function showCake() {
+            changePage('page3');
+            let c = 3;
+            const t = setInterval(() => {
+                c--;
+                document.getElementById('count').innerText = c;
+                if(c === 0) {
+                    clearInterval(t);
+                    document.getElementById('flame').style.opacity = 0;
+                    setTimeout(() => changePage('page4'), 1500);
                 }
             }, 1000);
         }
 
-        function openGift(num) {
-            const overlay = document.getElementById('gift-overlay');
-            const container = document.getElementById('media-content');
-            overlay.style.display = 'flex';
-
-            // ADD YOUR PHOTO/VIDEO NAMES HERE
-            if (num === 1) container.innerHTML = `<img src="Screenshot_2026-05-04-15-34-31-232.jpeg">`;
-            if (num === 2) container.innerHTML = `<img src="Screenshot_2026-05-04-15-30-22-145.jpeg">`;
-            if (num === 3) container.innerHTML = `<img src="Screenshot_2026-05-04-15-49-55-674.jpeg">`;
-            if (num === 4) container.innerHTML = `<img src="Screenshot_2026-05-04-15-51-20-647.jpeg">`;
-            if (num === 5) {
-                container.innerHTML = `<video controls autoplay><source src="VID-20260328-WA0025.mp4" type="video/mp4"></video>`;
-                document.getElementById('final-msg').style.opacity = '1';
+        function openGift(n) {
+            const vault = document.getElementById('media-vault');
+            vault.innerHTML = ''; 
+            const fileName = giftRegistry[n];
+            
+            if(n === 5) {
+                const video = document.createElement('video');
+                video.className = 'media-content';
+                video.src = 'assets/' + fileName;
+                video.controls = true;
+                video.autoplay = true;
+                vault.appendChild(video);
+                document.getElementById('final-tag').style.display = 'block';
+            } else {
+                const img = document.createElement('img');
+                img.className = 'media-content';
+                img.src = 'assets/' + fileName; 
+                vault.appendChild(img);
             }
         }
 
-        function closeGift() {
-            document.getElementById('gift-overlay').style.display = 'none';
-            document.getElementById('media-content').innerHTML = '';
-        }
-
-        function switchPage(oldId, newId) {
-            document.getElementById(oldId).classList.remove('active');
-            document.getElementById(newId).classList.add('active');
+        function changePage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
         }
     </script>
 </body>
-  </html>
+                    </html>
